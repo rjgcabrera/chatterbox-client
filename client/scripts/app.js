@@ -1,5 +1,5 @@
 var app = {
-  //set: new Set(),
+  messages: [],
   friends: [],
   rooms: [],
   server: 'http://parse.sfm6.hackreactor.com/chatterbox/classes/messages'
@@ -15,16 +15,9 @@ app.init = function() {
     $('#roomSelect').change(function(){
        var selectedRoom = $('#roomSelect option:selected').text();
        console.log(selectedRoom);
-    //  if (!$('.message').hasClass(selectedRoom)) {
-
-    //  }
-       //$(`.message:not(.${selectedRoom})`).toggle();
        $('.message').show();
        $(`.message:not(.${selectedRoom})`).toggle();
-       //$(`.${selectedRoom}`).toggle();
     });
-    //$('.username').on('click', app.handleUsernameClick);
-    
 };
 
 app.send = function(message) {
@@ -48,7 +41,6 @@ app.send = function(message) {
 
 app.fetch = function() {
     $.ajax({
-        // always use this url
         url: app.server,
         type: 'GET',
         data: 'order=-createdAt',
@@ -56,10 +48,12 @@ app.fetch = function() {
         contentType: 'application/json',
         success: function(data) {
             console.log(data);
-             _.each(data.results, function(item) {
-                 app.renderMessage(item);
-                });
-            // });
+            app.clearMessages();
+            app.messages = [];
+            _.each(data.results, function(item) {
+                app.messages.push(item);
+            });
+            app.messages.forEach(app.renderMessage);
         },
         error: function (data) {
             console.error('chatterbox: Failed to send message');
@@ -69,14 +63,13 @@ app.fetch = function() {
 
 
 app.clearMessages = function(){
-  $('#chats').children().remove();
+    console.log('yo');
+  $('#chats').empty();
 };
 
 app.renderMessage = function(item) {
-    // var node = document.createElement('div')
   var $message = $('<div></div>');
   $message.addClass('message');
-  //if statement
   var room = item.roomname;
   if(!room) {
       room = "undefined";
@@ -118,12 +111,7 @@ app.handleUsernameClick = (event) => {
         $friend.append($(event.target).text());
         $('#friends').append($friend);
     }
-    // for (var i = 0; i < app.friends.length; i++) {
-    //     if($(".message").html().includes(app.friends[i])) {
-    //         this.addClass('isFriend')
-    //         $(".isFriend").css('font-weight', 'bold')
-    //     }
-    // }
+
     var $messages = Array.from($('.message'));
     for (var i = 0; i < $messages.length; i++) {
         for (var j = 0; j < app.friends.length; j++) {
@@ -137,13 +125,6 @@ app.handleUsernameClick = (event) => {
 
 $(document).ready(function() {
     app.init();
-    //setInterval(app.init, 3000);
-    // $('.username').on(click, function() {app.set.add($(this).text());});
+    setInterval(app.fetch, 3000);
 });
 
-//(var )
-
-//$('#send .submit').trigger('submit');
-
-//var access_token = " "
-//$.get()
