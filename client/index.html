@@ -26,14 +26,20 @@
   <body>
     <div id="main">
       <h1>chatterbox</h1>
-      <form action="http://parse.sfm6.hackreactor.com/" methods ="post">
-        <input type="text" name ="message">
+      <div id="friends">Friends</div>
+      <select>
+        <option>t1</option>
+        <option>t2</option>
+      </select>
+      <form id="send" action="http://parse.sfm6.hackreactor.com/" methods ="post">
+        <input id = "chatroom" type="text" name="room" placeholder="Create a room!">
+        <input id = "message" type="text" name="message" placeholder="Write a message!">
         <input type= "submit">
       </form>
       <!-- Your HTML goes here! -->
     </div>
     <div id="chats">
-      <div id="messages"></div>
+      <!--<div id="messages"></div>-->
     </div>
   </body>
 </html>
